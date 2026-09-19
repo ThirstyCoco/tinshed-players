@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}New assignment · Tinshed Players{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">New assignment</h1>
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Volunteer *</label>
+    <select class="form-select" name="volunteer_id" required>
+      {% for volunteer in volunteers %}
+      <option value="{{ volunteer.id }}">{{ volunteer.name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Performance *</label>
+    <select class="form-select" name="performance_id" required>
+      {% for performance in performances %}
+      <option value="{{ performance.id }}">{{ performance.production.title }} — {{ performance.date.strftime('%d %b %Y') }} {{ performance.start_time.strftime('%H:%M') }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Role *</label>
+    <input class="form-control" name="role" required placeholder="e.g. Sound Op">
+  </div>
+  <button class="btn btn-primary" type="submit">Save</button>
+  <a class="btn btn-link" href="{{ url_for('assignments.list_assignments') }}">Cancel</a>
+</form>
+{% endblock %}

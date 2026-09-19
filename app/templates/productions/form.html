@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Add production · Tinshed Players{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Add production</h1>
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Title *</label>
+    <input class="form-control" name="title" required>
+  </div>
+  <button class="btn btn-primary" type="submit">Save</button>
+  <a class="btn btn-link" href="{{ url_for('productions.list_productions') }}">Cancel</a>
+</form>
+{% endblock %}

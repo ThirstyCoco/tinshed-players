@@ -1,0 +1,39 @@
+from app.models import Assignment, Volunteer, db
+
+
+def test_create_volunteer(client):
+    response = client.post(
+        "/volunteers/new",
+        data={"name": "Kylie Toomey", "phone": "0409 226 731"},
+        follow_redirects=True,
+    )
+    assert response.status_code == 200
+    assert b"Kylie Toomey" in response.data
+
+
+def test_volunteer_requires_name(client):
+    response = client.post("/volunteers/new", data={"name": ""})
+    assert response.status_code == 400
+
+
+def test_volunteer_persists(client, app):
+    client.post("/volunteers/new", data={"name": "Vera Sokolova"})
+    with app.app_context():
+        assert Volunteer.query.count() == 1
+
+
+def test_deactivate_keeps_assignments(client, app, seed):
+    with app.app_context():
+        assignment = Assignment(
+            volunteer=seed["volunteer"],
+            performance=seed["performance"],
+            role="Box Office",
+        )
+        db.session.add(assignment)
+        db.session.commit()
+        assignment_id = assignment.id
+
+    client.post(f"/volunteers/{seed['volunteer'].id}/toggle")
+
+    with app.app_context():
+        assert db.session.get(Assignment, assignment_id) is not None

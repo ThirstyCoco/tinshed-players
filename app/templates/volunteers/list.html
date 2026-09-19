@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Volunteers · Tinshed Players{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3">Volunteers</h1>
+  <a href="{{ url_for('volunteers.create_volunteer') }}" class="btn btn-primary">Add volunteer</a>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr><th>Name</th><th>Email</th><th>Phone</th><th>Status</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for volunteer in volunteers %}
+    <tr>
+      <td>{{ volunteer.name }}</td>
+      <td>{{ volunteer.email or '-' }}</td>
+      <td>{{ volunteer.phone or '-' }}</td>
+      <td>{{ 'Active' if volunteer.is_active else 'Inactive' }}</td>
+      <td>
+        <form method="post" action="{{ url_for('volunteers.toggle_volunteer', volunteer_id=volunteer.id) }}">
+          <button class="btn btn-sm btn-outline-secondary">{{ 'Deactivate' if volunteer.is_active else 'Activate' }}</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" class="text-muted">No volunteers yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

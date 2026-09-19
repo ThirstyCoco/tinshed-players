@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Productions · Tinshed Players{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3">Productions</h1>
+  <a href="{{ url_for('productions.create_production') }}" class="btn btn-primary">Add production</a>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr><th>Title</th><th>Performances</th><th></th></tr>
+  </thead>
+  <tbody>
+    {% for production in productions %}
+    <tr>
+      <td>{{ production.title }}</td>
+      <td>{{ production.performances|length }}</td>
+      <td><a href="{{ url_for('productions.production_detail', production_id=production.id) }}">View</a></td>
+    </tr>
+    {% else %}
+    <tr><td colspan="3" class="text-muted">No productions yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

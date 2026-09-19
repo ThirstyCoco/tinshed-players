@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ production.title }} · Tinshed Players{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h1 class="h3">{{ production.title }}</h1>
+  <a href="{{ url_for('productions.create_performance', production_id=production.id) }}" class="btn btn-primary">Add performance</a>
+</div>
+<table class="table table-striped">
+  <thead>
+    <tr><th>Date</th><th>Start</th><th>Crew call</th><th>Assigned</th></tr>
+  </thead>
+  <tbody>
+    {% for performance in production.performances %}
+    <tr>
+      <td>{{ performance.date.strftime('%d %b %Y') }}</td>
+      <td>{{ performance.start_time.strftime('%H:%M') }}</td>
+      <td>
+        {% for call in performance.crew_calls %}{{ call.role }} x{{ call.count }}{{ ', ' if not loop.last }}{% endfor %}
+      </td>
+      <td>{{ performance.assignments|length }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" class="text-muted">No performances yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
