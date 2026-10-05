@@ -5,16 +5,19 @@ from app.models import Assignment, CrewCall, Performance, Production, db
 
 def test_management_page_shows_overlap_and_duration(client, seed, app):
     with app.app_context():
+        # The objects created by the seed fixture are detached once its app
+        # context exits, so re-fetch the performance before changing it.
+        performance = db.session.get(Performance, seed["performance"].id)
+        performance.duration_minutes = 90
         second = Performance(
             production_id=seed["production"].id,
             date=date(2026, 9, 4),
             start_time=time(20, 0),
             duration_minutes=60,
         )
-        seed["performance"].duration_minutes = 90
         db.session.add(second)
         db.session.commit()
-        production_id = seed["production"].id
+        production_id = performance.production_id
 
     response = client.get(f"/productions/{production_id}/management")
     assert response.status_code == 200
