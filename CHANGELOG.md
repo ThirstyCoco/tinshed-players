@@ -14,6 +14,11 @@ project uses [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   already hold a role, and a guard that rejects inactive volunteers.
 - `seed.py`, a small demo-data script for manual testing and screenshots.
 
+### Fixed
+- CI now runs the whole test suite instead of failing while importing `app`: added
+  `pytest.ini` so the repository root is placed on `sys.path` when pytest is started
+  as the `pytest` console script (as in `.github/workflows/ci.yml`).
+
 ### Planned (A3)
 - Coverage-gap view that highlights crew-call roles which are still unfilled for a performance
   (the `CrewCall(role, count)` model added in 0.1.0 is already in place to support this).
